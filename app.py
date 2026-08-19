@@ -1,6 +1,6 @@
 """
 Grid to Flag — How much of a Formula 1 result is decided before the lights go out?
-COMP 4433 · Project 2
+COMP 3433 · Project 2
 
 Run with:  python app.py     then open http://127.0.0.1:8050
 """
@@ -26,21 +26,21 @@ else:
     df = results.merge(races, on=["season", "round"], how="left") \
                 .merge(circuits, on="circuitId", how="left")
 
-    # 1. Drop cars that never took the start - they have no meaningful grid slot
+    # Drop cars that never took the start - they have no meaningful grid slot
     df = df[~df["status"].isin(["Did not qualify", "Did not prequalify", "Withdrew"])]
 
-    # 2. Pit-lane starts are recorded as grid 0 - recode to one slot behind the last qualifier
+    # Pit-lane starts are recorded as grid 0 - recode to one slot behind the last qualifier
     field_size = df.groupby(["season", "round"])["grid"].transform("max")
     df["grid"] = np.where(df["grid"] == 0, field_size + 1, df["grid"])
     df = df[df["grid"] > 0]
     df["field_size"] = field_size
 
-    # 3. "Classified" (given a finishing position) is not the same as "finished"
+    # "Classified" (given a finishing position) is not the same as "finished"
     df["position"] = pd.to_numeric(df["position"], errors="coerce")
     df["classified"] = df["positionText"].astype(str).str.isdigit()
     df["dnf"] = ~df["classified"]
 
-    # 4. Outcome flags and positions gained (positive = moved forward)
+    # Outcome flags and positions gained (positive = moved forward)
     df["positions_gained"] = np.where(df["classified"], df["grid"] - df["position"], np.nan)
     df["won"]    = (df["position"] == 1).fillna(False)
     df["podium"] = (df["position"] <= 3).fillna(False)
@@ -149,7 +149,7 @@ app.layout = html.Div([
     # ---------------- Header: state the question ----------------
     html.Header([
         html.Div([
-            html.Div("COMP 4433 · Project 2", className="eyebrow"),
+            html.Div("COMP 3433 · Project 2", className="eyebrow"),
             html.H1("GRID TO FLAG"),
             html.P("How much of a Formula 1 result is decided before the lights go out?",
                    className="thesis"),
@@ -164,7 +164,7 @@ app.layout = html.Div([
         html.Img(src="/assets/car.svg", className="car", alt="Formula 1 car illustration"),
     ]),
 
-    # ---------------- Step 1: controls ----------------
+    # Step 1: controls 
     html.Section([
         html.H2("1 · Choose the races you want to study", className="step-head"),
         html.P("The app opens on 2000–2024 at every circuit, which is a good starting point. "
@@ -248,7 +248,7 @@ app.layout = html.Div([
         ], className="control-panel"),
     ]),
 
-    # ---------------- Step 2: the answer ----------------
+    # Step 2: the answer 
     html.Section([
         html.H2("2 · The answer for your selection", className="step-head"),
         html.P("Rates are only shown when at least five cars started from your chosen slot. "
@@ -263,7 +263,7 @@ app.layout = html.Div([
         ], className="stat-row"),
     ], className="answer-block"),
 
-    # ---------------- Step 3: the evidence ----------------
+    # Step 3: the evidence 
     html.Section([
         html.H2("3 · The evidence", className="step-head"),
         html.P("Each chart responds to the same controls above. Hover any point for the "
