@@ -2,8 +2,6 @@
 
 **How much of a Formula 1 result is decided before the lights go out?**
 
-**Open in a Markdown reader for readability**
-
 An interactive Dash application measuring how strongly a car's starting grid position determines where it finishes, across 75 seasons of Formula 1 (1950–2024, 25,155 race entries). Pick an era, a circuit and a starting slot, and the app returns an empirical answer: odds of winning, of a podium, median finish, and chance of not finishing.
 
 Built for **COMP 3433 · Project 2**.
